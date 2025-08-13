@@ -1,0 +1,2121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyHub - Ultimate Learning Platform</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #667eea;
+            --primary-dark: #5a67d8;
+            --secondary: #764ba2;
+            --secondary-light: #8a5fb2;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --transition: all 0.3s ease;
+            --radius: 12px;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e7f1 100%);
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(230, 235, 245, 0.4) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(230, 235, 245, 0.4) 0%, transparent 20%);
+            background-attachment: fixed;
+        }
+
+        /* Geometric background patterns */
+        .geometric-bg {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .geometric-bg::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                linear-gradient(45deg, transparent 65%, rgba(102, 126, 234, 0.03) 65%),
+                linear-gradient(-45deg, transparent 65%, rgba(118, 75, 162, 0.03) 65%);
+            background-size: 40px 40px;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+            position: relative;
+            z-index: 1000;
+            padding: 1.2rem 0;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            cursor: pointer;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-item {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 30px;
+            transition: var(--transition);
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .search-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex: 1;
+            max-width: 500px;
+        }
+
+        .search-box {
+            flex: 1;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 20px 12px 50px;
+            border: none;
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: var(--shadow);
+            font-size: 16px;
+            transition: var(--transition);
+            border: 1px solid rgba(102, 126, 234, 0.1);
+        }
+
+        .search-box input:focus {
+            outline: none;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+            border-color: rgba(102, 126, 234, 0.3);
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary);
+        }
+
+        /* Main Content */
+        .main-container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 4rem 0 3rem;
+            color: var(--dark);
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            font-weight: 800;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            color: var(--gray);
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .cta-btn {
+            padding: 15px 35px;
+            border: none;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: var(--shadow);
+        }
+
+        .cta-btn.primary {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .cta-btn.secondary {
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 1rem 2rem;
+            border-radius: var(--radius);
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            box-shadow: var(--shadow);
+        }
+
+        .breadcrumb a {
+            color: var(--primary);
+            text-decoration: none;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        /* Sections */
+        .section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            margin: 2rem 0;
+            padding: 2.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+        }
+
+        .section-title h2 {
+            color: var(--primary);
+            font-size: 2.2rem;
+            font-weight: 700;
+        }
+
+        .section-title i {
+            color: var(--secondary);
+            font-size: 2rem;
+            background: rgba(118, 75, 162, 0.1);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .back-btn {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 15px;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            box-shadow: var(--shadow);
+        }
+
+        .back-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        /* Subject Categories Grid */
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .category-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: var(--radius);
+            padding: 2rem;
+            text-align: center;
+            transition: var(--transition);
+            cursor: pointer;
+            border: 2px solid rgba(102, 126, 234, 0.05);
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, transparent 0%, rgba(102, 126, 234, 0.05) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1;
+        }
+
+        .category-card:hover::before {
+            opacity: 1;
+        }
+
+        .category-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-hover);
+            border-color: rgba(102, 126, 234, 0.2);
+        }
+
+        .category-card * {
+            position: relative;
+            z-index: 2;
+        }
+
+        .category-icon {
+            font-size: 3.2rem;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1.2rem;
+        }
+
+        .category-card h3 {
+            color: var(--dark);
+            font-size: 1.6rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .category-card p {
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+        }
+
+        .category-stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(102, 126, 234, 0.1);
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+
+        /* Topic Grid */
+        .topics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.8rem;
+            margin-bottom: 2rem;
+        }
+
+        .topic-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: var(--radius);
+            padding: 1.8rem;
+            transition: var(--transition);
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+
+        .topic-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+            border-color: rgba(102, 126, 234, 0.2);
+        }
+
+        .topic-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.2rem;
+        }
+
+        .topic-title {
+            font-size: 1.3rem;
+            color: var(--dark);
+            font-weight: 700;
+        }
+
+        .topic-level {
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        .topic-level.beginner {
+            background: #e8f5e8;
+            color: #2e7d32;
+        }
+
+        .topic-level.intermediate {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+
+        .topic-level.advanced {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .topic-description {
+            color: var(--gray);
+            margin-bottom: 1.2rem;
+            font-size: 1rem;
+        }
+
+        .topic-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        /* Materials Grid */
+        .materials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.2rem;
+        }
+
+        .material-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: var(--radius);
+            padding: 1.8rem;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .material-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .material-card h3 {
+            color: var(--primary);
+            margin-bottom: 1.2rem;
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        .material-card p {
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+        }
+
+        .material-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.2rem;
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .download-btn {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 15px;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            justify-content: center;
+            font-weight: 600;
+            box-shadow: var(--shadow);
+        }
+
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        /* Exam Cards */
+        .exams-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .exam-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: var(--radius);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            position: relative;
+        }
+
+        .exam-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .exam-card h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .exam-card h3 i {
+            color: var(--secondary);
+            font-size: 1.8rem;
+        }
+
+        .exam-card p {
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+        }
+
+        .exam-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(102, 126, 234, 0.1);
+        }
+
+        .exam-stat {
+            text-align: center;
+        }
+
+        .exam-stat .number {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .exam-stat .label {
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+
+        .start-exam-btn {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            justify-content: center;
+            font-weight: 600;
+            box-shadow: var(--shadow);
+        }
+
+        .start-exam-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        /* MCQ Exam Interface */
+        .mcq-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .question-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: var(--radius);
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .question-number {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 10px 15px;
+            border-radius: 50%;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .question-text {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            color: var(--dark);
+            font-weight: 500;
+            line-height: 1.6;
+        }
+
+        .options-container {
+            display: grid;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .option {
+            background: rgba(255, 255, 255, 0.8);
+            border: 2px solid transparent;
+            border-radius: 10px;
+            padding: 15px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .option:hover {
+            border-color: var(--primary);
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .option.selected {
+            border-color: var(--primary);
+            background: rgba(102, 126, 234, 0.2);
+        }
+
+        .option.correct {
+            border-color: var(--success);
+            background: rgba(76, 175, 80, 0.2);
+        }
+
+        .option.incorrect {
+            border-color: var(--danger);
+            background: rgba(244, 67, 54, 0.2);
+        }
+
+        .option-letter {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .mcq-controls {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .mcq-btn {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: var(--transition);
+            font-weight: 600;
+        }
+
+        .mcq-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .mcq-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .score-display {
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 3rem;
+            border-radius: var(--radius);
+            margin: 2rem 0;
+        }
+
+        .score-display h3 {
+            font-size: 2.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .score-value {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin: 1.5rem 0;
+        }
+
+        .exam-timer {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px 15px;
+            border-radius: 30px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Footer */
+        .footer {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 4rem 0 2rem;
+            margin-top: 4rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+        }
+
+        .footer-section {
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            border-radius: 3px;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-links a {
+            color: var(--gray);
+            text-decoration: none;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+            transform: translateX(5px);
+        }
+
+        .footer-links a i {
+            font-size: 0.9rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(102, 126, 234, 0.1);
+            color: var(--primary);
+            transition: var(--transition);
+        }
+
+        .social-links a:hover {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+            
+            .section {
+                padding: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem 0;
+            }
+
+            .nav-container {
+                padding: 0 1.2rem;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .nav-menu {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .logo {
+                font-size: 1.8rem;
+            }
+
+            .search-container {
+                max-width: 100%;
+                width: 100%;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .section-title h2 {
+                font-size: 1.8rem;
+            }
+            
+            .section {
+                padding: 1.8rem;
+            }
+            
+            .footer-container {
+                gap: 2rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero {
+                padding: 3rem 0 2rem;
+            }
+            
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .section {
+                padding: 1.5rem;
+            }
+            
+            .section-title h2 {
+                font-size: 1.6rem;
+            }
+            
+            .breadcrumb {
+                padding: 0.8rem 1.5rem;
+            }
+            
+            .footer-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .mcq-controls {
+                flex-direction: column;
+                gap: 0.8rem;
+            }
+            
+            .mcq-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav-container">
+            <div class="logo" onclick="showPage('home')">
+                <i class="fas fa-graduation-cap"></i> StudyHub
+            </div>
+            
+            <div class="nav-menu">
+                <div class="nav-item active" onclick="showPage('home')" data-page="home">Home</div>
+                <div class="nav-item" onclick="showPage('subjects')" data-page="subjects">Subjects</div>
+                <div class="nav-item" onclick="showPage('exams')" data-page="exams">Exams</div>
+                <div class="nav-item" onclick="showPage('resources')" data-page="resources">Resources</div>
+                <div class="nav-item" onclick="showPage('about')" data-page="about">About</div>
+            </div>
+            
+            <div class="search-container">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Search materials, topics, exams...">
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-container">
+        
+        <!-- Home Page -->
+        <div class="page active" id="home">
+            <section class="hero">
+                <h1>Elevate Your Learning Experience</h1>
+                <p>StudyHub brings together the best resources, materials, and practice exams to help you succeed in your academic journey</p>
+                <div class="cta-buttons">
+                    <button class="cta-btn primary" onclick="showPage('subjects')">
+                        <i class="fas fa-book"></i> Explore Subjects
+                    </button>
+                    <button class="cta-btn secondary" onclick="showPage('exams')">
+                        <i class="fas fa-brain"></i> Take Exams
+                    </button>
+                </div>
+            </section>
+
+            <section class="section geometric-bg">
+                <div class="section-header">
+                    <div class="section-title">
+                        <i class="fas fa-fire"></i>
+                        <h2>Popular Subjects</h2>
+                    </div>
+                </div>
+                
+                <div class="categories-grid" id="popularSubjects">
+                    <!-- Popular subjects will be populated by JavaScript -->
+                </div>
+            </section>
+
+            <section class="section geometric-bg">
+                <div class="section-header">
+                    <div class="section-title">
+                        <i class="fas fa-layer-group"></i>
+                        <h2>Featured Exams</h2>
+                    </div>
+                </div>
+                
+                <div class="exams-grid">
+                    <div class="exam-card">
+                        <h3><i class="fas fa-calculator"></i> Mathematics Final Exam</h3>
+                        <p>Comprehensive exam covering algebra, calculus, and geometry concepts from beginner to advanced levels.</p>
+                        
+                        <div class="exam-meta">
+                            <div class="exam-stat">
+                                <div class="number">50</div>
+                                <div class="label">Questions</div>
+                            </div>
+                            <div class="exam-stat">
+                                <div class="number">120</div>
+                                <div class="label">Minutes</div>
+                            </div>
+                            <div class="exam-stat">
+                                <div class="number">Intermediate</div>
+                                <div class="label">Level</div>
+                            </div>
+                        </div>
+                        
+                        <button class="start-exam-btn" onclick="startExam('math_final')">
+                            <i class="fas fa-play"></i> Start Exam
+                        </button>
+                    </div>
+                    
+                    <div class="exam-card">
+                        <h3><i class="fas fa-atom"></i> Physics Fundamentals</h3>
+                        <p>Test your understanding of core physics concepts including mechanics, thermodynamics, and electromagnetism.</p>
+                        
+                        <div class="exam-meta">
+                            <div class="exam-stat">
+                                <div class="number">40</div>
+                                <div class="label">Questions</div>
+                            </div>
+                            <div class="exam-stat">
+                                <div class="number">90</div>
+                                <div class="label">Minutes</div>
+                            </div>
+                            <div class="exam-stat">
+                                <div class="number">Beginner</div>
+                                <div class="label">Level</div>
+                            </div>
+                        </div>
+                        
+                        <button class="start-exam-btn" onclick="startExam('physics_fundamentals')">
+                            <i class="fas fa-play"></i> Start Exam
+                        </button>
+                    </div>
+                    
+                    <div class="exam-card">
+                        <h3><i class="fas fa-laptop-code"></i> Computer Science Mastery</h3>
+                        <p>Advanced exam covering programming, algorithms, data structures, and database systems.</p>
+                        
+                        <div class="exam-meta">
+                            <div class="exam-stat">
+                                <div class="number">60</div>
+                                <div class="label">Questions</div>
+                            </div>
+                            <div class="exam-stat">
+                                <div class="number">150</div>
+                                <div class="label">Minutes</div>
+                            </div>
+                            <div class="exam-stat">
+                                <div class="number">Advanced</div>
+                                <div class="label">Level</div>
+                            </div>
+                        </div>
+                        
+                        <button class="start-exam-btn" onclick="startExam('cs_mastery')">
+                            <i class="fas fa-play"></i> Start Exam
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Subjects Page -->
+        <div class="page" id="subjects">
+            <div class="breadcrumb">
+                <a onclick="showPage('home')">Home</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>Subjects</span>
+            </div>
+
+            <section class="section geometric-bg">
+                <div class="section-header">
+                    <div class="section-title">
+                        <i class="fas fa-book-open"></i>
+                        <h2>All Subjects</h2>
+                    </div>
+                </div>
+                
+                <div class="categories-grid" id="allSubjects">
+                    <!-- All subjects will be populated by JavaScript -->
+                </div>
+            </section>
+        </div>
+
+        <!-- Subject Detail Page -->
+        <div class="page" id="subjectDetail">
+            <div class="breadcrumb" id="subjectBreadcrumb">
+                <!-- Breadcrumb will be populated by JavaScript -->
+            </div>
+
+            <section class="section geometric-bg">
+                <div class="section-header">
+                    <div class="section-title" id="subjectTitle">
+                        <!-- Subject title will be populated by JavaScript -->
+                    </div>
+                    <button class="back-btn" onclick="showPage('subjects')">
+                        <i class="fas fa-arrow-left"></i> Back to Subjects
+                    </button>
+                </div>
+                
+                <div class="topics-grid" id="topicsGrid">
+                    <!-- Topics will be populated by JavaScript -->
+                </div>
+            </section>
+        </div>
+
+        <!-- Exams Page -->
+        <div class="page" id="exams">
+            <div class="breadcrumb">
+                <a onclick="showPage('home')">Home</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>Exams</span>
+            </div>
+
+            <section class="section geometric-bg">
+                <div class="section-header">
+                    <div class="section-title">
+                        <i class="fas fa-clipboard-list"></i>
+                        <h2>Practice Exams</h2>
+                    </div>
+                </div>
+                
+                <div class="exams-grid" id="examsList">
+                    <!-- Exams will be populated by JavaScript -->
+                </div>
+            </section>
+        </div>
+
+        <!-- MCQ Exam Page -->
+        <div class="page" id="mcqExam">
+            <div class="breadcrumb" id="examBreadcrumb">
+                <!-- Breadcrumb will be populated by JavaScript -->
+            </div>
+
+            <section class="section geometric-bg">
+                <div class="section-header">
+                    <div class="section-title" id="examTitle">
+                        <!-- Exam title will be populated by JavaScript -->
+                    </div>
+                    <button class="back-btn" onclick="showPage('exams')">
+                        <i class="fas fa-arrow-left"></i> Back to Exams
+                    </button>
+                </div>
+                
+                <div class="mcq-container" id="mcqContainer">
+                    <!-- MCQ will be populated by JavaScript -->
+                </div>
+            </section>
+        </div>
+
+        <!-- Resources Page -->
+        <div class="page" id="resources">
+            <div class="breadcrumb">
+                <a onclick="showPage('home')">Home</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>Resources</span>
+            </div>
+
+            <section class="section geometric-bg">
+                <div class="section-header">
+                    <div class="section-title">
+                        <i class="fas fa-book"></i>
+                        <h2>Study Resources</h2>
+                    </div>
+                </div>
+                
+                <div class="materials-grid">
+                    <div class="material-card fade-in-up">
+                        <h3>Algebra Fundamentals</h3>
+                        <p>Comprehensive guide to solving linear equations with step-by-step examples and practice problems.</p>
+                        <div class="material-meta">
+                            <span><i class="fas fa-file-pdf"></i> PDF</span>
+                            <span><i class="fas fa-hdd"></i> 2.5 MB</span>
+                            <span><i class="fas fa-download"></i> 1250</span>
+                        </div>
+                        <button class="download-btn" onclick="downloadMaterial('Algebra Fundamentals')">
+                            <i class="fas fa-download"></i>
+                            Download Material
+                        </button>
+                    </div>
+                    
+                    <div class="material-card fade-in-up">
+                        <h3>Physics Formula Handbook</h3>
+                        <p>Essential formulas and equations for mechanics, thermodynamics, and electromagnetism.</p>
+                        <div class="material-meta">
+                            <span><i class="fas fa-file-pdf"></i> PDF</span>
+                            <span><i class="fas fa-hdd"></i> 3.1 MB</span>
+                            <span><i class="fas fa-download"></i> 980</span>
+                        </div>
+                        <button class="download-btn" onclick="downloadMaterial('Physics Formula Handbook')">
+                            <i class="fas fa-download"></i>
+                            Download Material
+                        </button>
+                    </div>
+                    
+                    <div class="material-card fade-in-up">
+                        <h3>Chemistry Reactions Guide</h3>
+                        <p>Complete reference for organic and inorganic chemistry reactions with mechanisms.</p>
+                        <div class="material-meta">
+                            <span><i class="fas fa-file-pdf"></i> PDF</span>
+                            <span><i class="fas fa-hdd"></i> 4.2 MB</span>
+                            <span><i class="fas fa-download"></i> 850</span>
+                        </div>
+                        <button class="download-btn" onclick="downloadMaterial('Chemistry Reactions Guide')">
+                            <i class="fas fa-download"></i>
+                            Download Material
+                        </button>
+                    </div>
+                    
+                    <div class="material-card fade-in-up">
+                        <h3>Programming Concepts</h3>
+                        <p>Learn programming fundamentals with examples in Python, Java, and JavaScript.</p>
+                        <div class="material-meta">
+                            <span><i class="fas fa-file-pdf"></i> PDF</span>
+                            <span><i class="fas fa-hdd"></i> 3.8 MB</span>
+                            <span><i class="fas fa-download"></i> 2100</span>
+                        </div>
+                        <button class="download-btn" onclick="downloadMaterial('Programming Concepts')">
+                            <i class="fas fa-download"></i>
+                            Download Material
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer geometric-bg">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>StudyHub</h3>
+                <p style="color: var(--gray); line-height: 1.7; margin-bottom: 1.5rem;">
+                    Your ultimate study companion with resources for students at all levels. Achieve academic excellence with our curated materials and practice exams.
+                </p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="#" onclick="showPage('home')"><i class="fas fa-chevron-right"></i> Home</a></li>
+                    <li><a href="#" onclick="showPage('subjects')"><i class="fas fa-chevron-right"></i> Subjects</a></li>
+                    <li><a href="#" onclick="showPage('exams')"><i class="fas fa-chevron-right"></i> Exams</a></li>
+                    <li><a href="#" onclick="showPage('resources')"><i class="fas fa-chevron-right"></i> Resources</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Resources</h3>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Study Materials</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Practice Questions</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Exam Papers</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Video Lectures</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fas fa-envelope"></i> contact@studyhub.com</a></li>
+                    <li><a href="#"><i class="fas fa-phone"></i> +1 (555) 123-4567</a></li>
+                    <li><a href="#"><i class="fas fa-map-marker-alt"></i> 123 Education St, Learning City</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2023 StudyHub. All rights reserved. | Designed with <i class="fas fa-heart" style="color: var(--danger);"></i> for students</p>
+        </div>
+    </footer>
+
+    <script>
+        // Enhanced Data Structure with comprehensive subjects and topics
+        const subjects = {
+            mathematics: {
+                name: "Mathematics",
+                icon: "fas fa-calculator",
+                description: "Master mathematical concepts from basic arithmetic to advanced calculus",
+                topics: {
+                    algebra: {
+                        name: "Algebra",
+                        level: "intermediate",
+                        description: "Linear equations, quadratic equations, polynomials, and algebraic expressions",
+                        materials: 15,
+                        questions: 120
+                    },
+                    calculus: {
+                        name: "Calculus",
+                        level: "advanced",
+                        description: "Differential and integral calculus, limits, derivatives, and applications",
+                        materials: 20,
+                        questions: 150
+                    },
+                    geometry: {
+                        name: "Geometry",
+                        level: "intermediate",
+                        description: "Shapes, angles, triangles, circles, and coordinate geometry",
+                        materials: 18,
+                        questions: 100
+                    }
+                }
+            },
+            physics: {
+                name: "Physics",
+                icon: "fas fa-atom",
+                description: "Explore the fundamental laws governing the universe",
+                topics: {
+                    mechanics: {
+                        name: "Classical Mechanics",
+                        level: "intermediate",
+                        description: "Motion, forces, energy, momentum, and rotational dynamics",
+                        materials: 25,
+                        questions: 180
+                    },
+                    thermodynamics: {
+                        name: "Thermodynamics",
+                        level: "advanced",
+                        description: "Heat, temperature, entropy, and thermodynamic processes",
+                        materials: 15,
+                        questions: 90
+                    },
+                    electromagnetism: {
+                        name: "Electromagnetism",
+                        level: "advanced",
+                        description: "Electric fields, magnetic fields, and electromagnetic waves",
+                        materials: 20,
+                        questions: 140
+                    }
+                }
+            },
+            chemistry: {
+                name: "Chemistry",
+                icon: "fas fa-flask",
+                description: "Discover the composition, structure, and properties of matter",
+                topics: {
+                    organic: {
+                        name: "Organic Chemistry",
+                        level: "advanced",
+                        description: "Carbon compounds, functional groups, reactions, and mechanisms",
+                        materials: 30,
+                        questions: 200
+                    },
+                    inorganic: {
+                        name: "Inorganic Chemistry",
+                        level: "intermediate",
+                        description: "Elements, compounds, periodic table, and chemical bonding",
+                        materials: 22,
+                        questions: 160
+                    },
+                    physical: {
+                        name: "Physical Chemistry",
+                        level: "advanced",
+                        description: "Chemical kinetics, thermodynamics, and quantum chemistry",
+                        materials: 20,
+                        questions: 130
+                    }
+                }
+            },
+            computer: {
+                name: "Computer Science",
+                icon: "fas fa-laptop-code",
+                description: "Programming, algorithms, and computational thinking",
+                topics: {
+                    programming: {
+                        name: "Programming Fundamentals",
+                        level: "beginner",
+                        description: "Variables, loops, functions, and basic programming concepts",
+                        materials: 35,
+                        questions: 250
+                    },
+                    datastructures: {
+                        name: "Data Structures",
+                        level: "intermediate",
+                        description: "Arrays, linked lists, stacks, queues, trees, and graphs",
+                        materials: 28,
+                        questions: 200
+                    },
+                    algorithms: {
+                        name: "Algorithms",
+                        level: "advanced",
+                        description: "Sorting, searching, dynamic programming, and algorithm analysis",
+                        materials: 25,
+                        questions: 180
+                    }
+                }
+            }
+        };
+
+        // Exam configurations
+        const exams = [
+            {
+                id: 'math_final',
+                title: 'Mathematics Final Exam',
+                subject: 'mathematics',
+                description: 'Complete assessment covering algebra, calculus, and geometry',
+                questions: 50,
+                duration: 120,
+                difficulty: 'intermediate'
+            },
+            {
+                id: 'physics_fundamentals',
+                title: 'Physics Fundamentals Test',
+                subject: 'physics',
+                description: 'Basic concepts in mechanics, thermodynamics, and electromagnetism',
+                questions: 40,
+                duration: 90,
+                difficulty: 'beginner'
+            },
+            {
+                id: 'chemistry_midterm',
+                title: 'Chemistry Midterm Exam',
+                subject: 'chemistry',
+                description: 'Organic and inorganic chemistry concepts with reactions',
+                questions: 45,
+                duration: 100,
+                difficulty: 'intermediate'
+            },
+            {
+                id: 'cs_mastery',
+                title: 'Computer Science Mastery',
+                subject: 'computer',
+                description: 'Programming concepts, algorithms, and problem solving',
+                questions: 60,
+                duration: 150,
+                difficulty: 'advanced'
+            }
+        ];
+
+        // MCQ questions database
+        const mcqQuestions = {
+            'math_final': [
+                {
+                    id: 1,
+                    question: "Solve for x: 2x + 5 = 13",
+                    options: ["x = 4", "x = 6", "x = 8", "x = 3"],
+                    correct: 0,
+                    explanation: "2x = 13 - 5 = 8, therefore x = 4"
+                },
+                {
+                    id: 2,
+                    question: "What is the slope of the line y = 3x - 2?",
+                    options: ["3", "-2", "1", "5"],
+                    correct: 0,
+                    explanation: "In the form y = mx + b, m is the slope, so the slope is 3"
+                },
+                {
+                    id: 3,
+                    question: "What is the derivative of x²?",
+                    options: ["2x", "x", "2", "x³/3"],
+                    correct: 0,
+                    explanation: "The derivative of x^n is n*x^(n-1)"
+                }
+            ],
+            'physics_fundamentals': [
+                {
+                    id: 1,
+                    question: "What is Newton's second law of motion?",
+                    options: ["F = ma", "F = mv", "F = m/a", "F = a/m"],
+                    correct: 0,
+                    explanation: "Force equals mass times acceleration (F = ma)"
+                },
+                {
+                    id: 2,
+                    question: "What is the SI unit of force?",
+                    options: ["Newton", "Joule", "Watt", "Pascal"],
+                    correct: 0,
+                    explanation: "Force is measured in Newtons (N)"
+                },
+                {
+                    id: 3,
+                    question: "Which law states that energy cannot be created or destroyed?",
+                    options: ["First Law of Thermodynamics", "Second Law of Thermodynamics", "Law of Conservation of Momentum", "Ohm's Law"],
+                    correct: 0,
+                    explanation: "The First Law of Thermodynamics deals with conservation of energy"
+                }
+            ],
+            'cs_mastery': [
+                {
+                    id: 1,
+                    question: "What is the time complexity of a binary search algorithm?",
+                    options: ["O(log n)", "O(n)", "O(n log n)", "O(1)"],
+                    correct: 0,
+                    explanation: "Binary search has logarithmic time complexity"
+                },
+                {
+                    id: 2,
+                    question: "Which data structure uses FIFO (First-In First-Out) principle?",
+                    options: ["Queue", "Stack", "Tree", "Graph"],
+                    correct: 0,
+                    explanation: "Queue follows the FIFO principle"
+                },
+                {
+                    id: 3,
+                    question: "What does SQL stand for?",
+                    options: ["Structured Query Language", "Standard Query Language", "Sequential Query Language", "Simple Query Language"],
+                    correct: 0,
+                    explanation: "SQL stands for Structured Query Language"
+                }
+            ]
+        };
+
+        // Application state
+        let currentPage = 'home';
+        let currentSubject = null;
+        let currentExam = null;
+        let currentQuestion = 0;
+        let selectedAnswers = [];
+        let mcqScore = 0;
+        let mcqCompleted = false;
+        let examTimer = null;
+        let timeRemaining = 0;
+        
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            renderPopularSubjects();
+            renderAllSubjects();
+            renderExamsList();
+        });
+
+        // Navigation functions
+        function showPage(pageId, data = null) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Update navigation
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Show selected page
+            document.getElementById(pageId).classList.add('active');
+            
+            // Update active nav item
+            const navItem = document.querySelector(`[data-page="${pageId}"]`);
+            if (navItem) navItem.classList.add('active');
+            
+            currentPage = pageId;
+
+            // Handle specific page logic
+            switch(pageId) {
+                case 'subjectDetail':
+                    if (data) showSubjectDetail(data);
+                    break;
+                case 'mcqExam':
+                    if (data) startExam(data);
+                    break;
+            }
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        // Render popular subjects on home page
+        function renderPopularSubjects() {
+            const container = document.getElementById('popularSubjects');
+            const popularKeys = ['mathematics', 'physics', 'chemistry', 'computer'];
+            
+            container.innerHTML = popularKeys.map(key => {
+                const subject = subjects[key];
+                const topicCount = Object.keys(subject.topics).length;
+                const totalMaterials = Object.values(subject.topics).reduce((sum, topic) => sum + topic.materials, 0);
+                const totalQuestions = Object.values(subject.topics).reduce((sum, topic) => sum + topic.questions, 0);
+                
+                return `
+                    <div class="category-card" onclick="showPage('subjectDetail', '${key}')">
+                        <div class="category-icon"><i class="${subject.icon}"></i></div>
+                        <h3>${subject.name}</h3>
+                        <p>${subject.description}</p>
+                        <div class="category-stats">
+                            <div class="stat">
+                                <div class="stat-number">${topicCount}</div>
+                                <div class="stat-label">Topics</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-number">${totalMaterials}</div>
+                                <div class="stat-label">Materials</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-number">${totalQuestions}</div>
+                                <div class="stat-label">Questions</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Render all subjects
+        function renderAllSubjects() {
+            const container = document.getElementById('allSubjects');
+            const subjectKeys = Object.keys(subjects);
+            
+            container.innerHTML = subjectKeys.map(key => {
+                const subject = subjects[key];
+                const topicCount = Object.keys(subject.topics).length;
+                const totalMaterials = Object.values(subject.topics).reduce((sum, topic) => sum + topic.materials, 0);
+                const totalQuestions = Object.values(subject.topics).reduce((sum, topic) => sum + topic.questions, 0);
+                
+                return `
+                    <div class="category-card" onclick="showPage('subjectDetail', '${key}')">
+                        <div class="category-icon"><i class="${subject.icon}"></i></div>
+                        <h3>${subject.name}</h3>
+                        <p>${subject.description}</p>
+                        <div class="category-stats">
+                            <div class="stat">
+                                <div class="stat-number">${topicCount}</div>
+                                <div class="stat-label">Topics</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-number">${totalMaterials}</div>
+                                <div class="stat-label">Materials</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-number">${totalQuestions}</div>
+                                <div class="stat-label">Questions</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Render exams list
+        function renderExamsList() {
+            const container = document.getElementById('examsList');
+            
+            container.innerHTML = exams.map(exam => {
+                const subject = subjects[exam.subject];
+                
+                return `
+                    <div class="exam-card">
+                        <h3><i class="${subject.icon}"></i> ${exam.title}</h3>
+                        <p>${exam.description}</p>
+                        
+                        <div class="exam-meta">
+                            <div class="exam-stat">
+                                <div class="number">${exam.questions}</div>
+                                <div class="label">Questions</div>
+                            </div>
+                            <div class="exam-stat">
+                                <div class="number">${exam.duration}</div>
+                                <div class="label">Minutes</div>
+                            </div>
+                            <div class="exam-stat">
+                                <div class="number">${exam.difficulty}</div>
+                                <div class="label">Level</div>
+                            </div>
+                        </div>
+                        
+                        <button class="start-exam-btn" onclick="startExam('${exam.id}')">
+                            <i class="fas fa-play"></i> Start Exam
+                        </button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Show subject detail page
+        function showSubjectDetail(subjectKey) {
+            currentSubject = subjectKey;
+            const subject = subjects[subjectKey];
+            
+            // Update breadcrumb
+            document.getElementById('subjectBreadcrumb').innerHTML = `
+                <a onclick="showPage('home')">Home</a>
+                <i class="fas fa-chevron-right"></i>
+                <a onclick="showPage('subjects')">Subjects</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>${subject.name}</span>
+            `;
+            
+            // Update title
+            document.getElementById('subjectTitle').innerHTML = `
+                <i class="${subject.icon}"></i>
+                <h2>${subject.name} Topics</h2>
+            `;
+            
+            // Render topics
+            const container = document.getElementById('topicsGrid');
+            container.innerHTML = Object.keys(subject.topics).map(topicKey => {
+                const topic = subject.topics[topicKey];
+                
+                return `
+                    <div class="topic-card" onclick="alert('Navigating to topic: ${topic.name}')">
+                        <div class="topic-header">
+                            <div class="topic-title">${topic.name}</div>
+                            <div class="topic-level ${topic.level}">${topic.level}</div>
+                        </div>
+                        <div class="topic-description">${topic.description}</div>
+                        <div class="topic-meta">
+                            <span><i class="fas fa-book"></i> ${topic.materials} Materials</span>
+                            <span><i class="fas fa-question"></i> ${topic.questions} Questions</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Start an exam
+        function startExam(examId) {
+            currentExam = examId;
+            const exam = exams.find(e => e.id === examId);
+            const subject = subjects[exam.subject];
+            
+            // Reset exam state
+            currentQuestion = 0;
+            selectedAnswers = [];
+            mcqScore = 0;
+            mcqCompleted = false;
+            timeRemaining = exam.duration * 60; // Convert to seconds
+            
+            // Update breadcrumb
+            document.getElementById('examBreadcrumb').innerHTML = `
+                <a onclick="showPage('home')">Home</a>
+                <i class="fas fa-chevron-right"></i>
+                <a onclick="showPage('exams')">Exams</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>${exam.title}</span>
+            `;
+            
+            // Update title
+            document.getElementById('examTitle').innerHTML = `
+                <i class="${subject.icon}"></i>
+                <h2>${exam.title}</h2>
+            `;
+            
+            // Show exam page
+            showPage('mcqExam');
+            
+            // Start timer
+            startExamTimer();
+            
+            // Render first question
+            renderMCQ();
+        }
+
+        // Start exam timer
+        function startExamTimer() {
+            if (examTimer) clearInterval(examTimer);
+            
+            examTimer = setInterval(() => {
+                timeRemaining--;
+                
+                if (timeRemaining <= 0) {
+                    clearInterval(examTimer);
+                    finishExam();
+                }
+                
+                // Update timer display
+                const timerElement = document.getElementById('timerDisplay');
+                if (timerElement) {
+                    const minutes = Math.floor(timeRemaining / 60);
+                    const seconds = timeRemaining % 60;
+                    timerElement.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                    
+                    // Change color when time is running low
+                    if (timeRemaining < 300) { // Less than 5 minutes
+                        timerElement.style.color = '#f44336';
+                    }
+                }
+            }, 1000);
+        }
+
+        // Render MCQ interface
+        function renderMCQ() {
+            const mcqContainer = document.getElementById('mcqContainer');
+            const questions = mcqQuestions[currentExam];
+            
+            if (!questions || questions.length === 0) {
+                mcqContainer.innerHTML = `
+                    <div class="question-card" style="text-align: center;">
+                        <h3>No questions available</h3>
+                        <p>Questions for this exam are being prepared. Please check back later.</p>
+                        <button class="mcq-btn" onclick="showPage('exams')">
+                            <i class="fas fa-arrow-left"></i> Back to Exams
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+            
+            if (mcqCompleted) {
+                const percentage = Math.round((mcqScore / questions.length) * 100);
+                let performance = 'Good';
+                if (percentage >= 90) performance = 'Excellent';
+                else if (percentage >= 80) performance = 'Very Good';
+                else if (percentage >= 70) performance = 'Good';
+                else if (percentage >= 60) performance = 'Fair';
+                else performance = 'Needs Improvement';
+                
+                mcqContainer.innerHTML = `
+                    <div class="score-display">
+                        <h3>Exam Completed!</h3>
+                        <div class="score-value">${mcqScore}/${questions.length}</div>
+                        <div style="font-size: 1.8rem; margin-bottom: 1.5rem;">${percentage}%</div>
+                        <div style="font-size: 1.2rem; opacity: 0.9; margin-bottom: 2rem;">
+                            Performance: ${performance}
+                        </div>
+                        
+                        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                            <button class="mcq-btn" onclick="startExam('${currentExam}')">
+                                <i class="fas fa-redo"></i> Retake Exam
+                            </button>
+                            <button class="mcq-btn" onclick="showPage('exams')" 
+                                    style="background: linear-gradient(45deg, #28a745, #20c997);">
+                                <i class="fas fa-arrow-left"></i> Back to Exams
+                            </button>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+            
+            const question = questions[currentQuestion];
+            
+            mcqContainer.innerHTML = `
+                <div class="question-card">
+                    <div class="question-header">
+                        <div class="question-number">${currentQuestion + 1}</div>
+                        <div class="exam-timer" id="timerDisplay">
+                            <i class="fas fa-clock"></i> 
+                            ${Math.floor(timeRemaining / 60)}:${(timeRemaining % 60).toString().padStart(2, '0')}
+                        </div>
+                    </div>
+                    
+                    <div class="question-text">${question.question}</div>
+                    
+                    <div class="options-container">
+                        ${question.options.map((option, index) => `
+                            <div class="option" onclick="selectOption(${index})" data-option="${index}">
+                                <div class="option-letter">${String.fromCharCode(65 + index)}</div>
+                                <span>${option}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                    
+                    <div class="mcq-controls">
+                        <button class="mcq-btn" onclick="previousQuestion()" 
+                                ${currentQuestion === 0 ? 'disabled' : ''}>
+                            <i class="fas fa-arrow-left"></i> Previous
+                        </button>
+                        <button class="mcq-btn" onclick="submitAnswer()" id="submitBtn" disabled>
+                            Submit Answer
+                        </button>
+                        ${currentQuestion === questions.length - 1 ? `
+                            <button class="mcq-btn" onclick="finishExam()" id="finishBtn" style="display: none; background: linear-gradient(45deg, #28a745, #20c997);">
+                                <i class="fas fa-flag-checkered"></i> Finish Exam
+                            </button>
+                        ` : `
+                            <button class="mcq-btn" onclick="nextQuestion()" id="nextBtn" style="display: none;">
+                                Next <i class="fas fa-arrow-right"></i>
+                            </button>
+                        `}
+                    </div>
+                </div>
+            `;
+            
+            // Restore previous selection if exists
+            if (selectedAnswers[currentQuestion] !== undefined) {
+                const selectedIndex = selectedAnswers[currentQuestion];
+                document.querySelector(`[data-option="${selectedIndex}"]`).classList.add('selected');
+                document.getElementById('submitBtn').disabled = false;
+            }
+        }
+
+        // MCQ interaction functions
+        function selectOption(optionIndex) {
+            // Remove previous selection
+            document.querySelectorAll('.option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            // Add selection to clicked option
+            document.querySelector(`[data-option="${optionIndex}"]`).classList.add('selected');
+            
+            // Enable submit button
+            document.getElementById('submitBtn').disabled = false;
+            
+            // Store selected answer
+            selectedAnswers[currentQuestion] = optionIndex;
+        }
+
+        function submitAnswer() {
+            const questions = mcqQuestions[currentExam];
+            const question = questions[currentQuestion];
+            const selectedOption = selectedAnswers[currentQuestion];
+            
+            // Show correct/incorrect answers
+            document.querySelectorAll('.option').forEach((option, index) => {
+                if (index === question.correct) {
+                    option.classList.add('correct');
+                } else if (index === selectedOption && index !== question.correct) {
+                    option.classList.add('incorrect');
+                }
+                option.style.pointerEvents = 'none';
+            });
+            
+            // Update score
+            if (selectedOption === question.correct) {
+                mcqScore++;
+            }
+            
+            // Show next/finish button
+            document.getElementById('submitBtn').style.display = 'none';
+            if (currentQuestion === questions.length - 1) {
+                document.getElementById('finishBtn').style.display = 'inline-block';
+            } else {
+                document.getElementById('nextBtn').style.display = 'inline-block';
+            }
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            renderMCQ();
+        }
+
+        function previousQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                renderMCQ();
+            }
+        }
+
+        function finishExam() {
+            mcqCompleted = true;
+            if (examTimer) clearInterval(examTimer);
+            renderMCQ();
+        }
+
+        // Download material function
+        function downloadMaterial(materialName) {
+            const button = event.target;
+            const originalContent = button.innerHTML;
+            
+            // Show loading state
+            button.innerHTML = '<div class="loading"></div> Downloading...';
+            button.disabled = true;
+            
+            // Simulate download
+            setTimeout(() => {
+                button.innerHTML = '<i class="fas fa-check"></i> Downloaded!';
+                button.style.background = 'linear-gradient(45deg, #4CAF50, #45a049)';
+                
+                setTimeout(() => {
+                    button.innerHTML = originalContent;
+                    button.disabled = false;
+                    button.style.background = 'linear-gradient(45deg, #667eea, #764ba2)';
+                }, 2000);
+                
+                // Show success notification
+                showNotification(`"${materialName}" downloaded successfully!`);
+            }, 1500);
+        }
+
+        // Show notification
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.textContent = message;
+            notification.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: linear-gradient(45deg, var(--primary), var(--secondary));
+                color: white;
+                padding: 15px 25px;
+                border-radius: var(--radius);
+                box-shadow: var(--shadow-hover);
+                z-index: 10000;
+                animation: fadeIn 0.3s ease;
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'fadeOut 0.3s ease';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        // Add scroll animations
+        window.addEventListener('scroll', function() {
+            const cards = document.querySelectorAll('.category-card, .topic-card, .material-card, .exam-card');
+            cards.forEach(card => {
+                const cardTop = card.getBoundingClientRect().top;
+                const cardBottom = card.getBoundingClientRect().bottom;
+                
+                if (cardTop < window.innerHeight && cardBottom > 0) {
+                    card.classList.add('fade-in-up');
+                }
+            });
+        });
+
+        // Add CSS for notifications
+        const style = document.createElement('style');
+        style.innerHTML = `
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(20px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+            @keyframes fadeOut {
+                from { opacity: 1; transform: translateY(0); }
+                to { opacity: 0; transform: translateY(20px); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
